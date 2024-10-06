@@ -273,10 +273,8 @@ NAN_METHOD(Message::packAsync) {
 
 
 NAN_METHOD(Message::unpackSync) {
-//	v8::Local<v8::Object> bufferObj = info[0]->ToObject();
 	v8::Local<v8::Context> context = Nan::GetCurrentContext();
 	v8::Local<v8::Object> bufferObj = info[0]->ToObject(context).ToLocalChecked();
-//	unsigned int len = info[1]->Uint32Value();
 	unsigned int len = info[1]->Uint32Value(context).FromJust();
 	v8::Local<v8::Array> result = unpack_iso8583(bufferObj, len);
 	info.GetReturnValue().Set(result);
@@ -293,7 +291,6 @@ NAN_METHOD(Message::test) {
 		v8::Local<v8::Context> context = Nan::GetCurrentContext();
 
 			for (unsigned int i = 0; i < messageFields->Length(); i++) {
-//				Nan::Set(result, i, messageFields->Get(context, i));
 				v8::Local<v8::Context> context = Nan::GetCurrentContext();
 				v8::Local<v8::Value> value = messageFields->Get(context, i).ToLocalChecked();
 				Nan::Set(result, i, value);
