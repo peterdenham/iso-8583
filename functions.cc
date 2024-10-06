@@ -49,7 +49,6 @@ v8::Local<v8::Array> pack_iso8583(v8::Handle<v8::Array> messageFields){
 	// set ISO message fields
     for (unsigned int i = 0; i < messageFields->Length(); i++) {
     	v8::Local<v8::Context> context = Nan::GetCurrentContext();
-//        v8::Handle<v8::Array> messageField = v8::Handle<v8::Array>::Cast(messageFields->Get(context, i));
 
     	v8::Isolate* isolate = context->GetIsolate();
     	v8::HandleScope handle_scope(isolate);
@@ -57,14 +56,11 @@ v8::Local<v8::Array> pack_iso8583(v8::Handle<v8::Array> messageFields){
     	v8::Local<v8::Value> maybeValue = messageFields->Get(context, i).ToLocalChecked();
     	if (maybeValue->IsArray()) {
     		v8::Local<v8::Array> messageField = v8::Local<v8::Array>::Cast(maybeValue);
-    		// Now you can use messageField safely as an Array
 
-//        DL_UINT16 messageFieldPosition = (DL_UINT16)messageField->Get(context, 0)->Uint32Value();
     	v8::Local<v8::Value> value0 = messageField->Get(context, 0).ToLocalChecked();
     	DL_UINT16 messageFieldPosition = static_cast<DL_UINT16>(value0->Uint32Value(context).FromJust());
 
         // convert it to C string
-//        v8::String::Utf8Value _messageFieldValue(messageField->Get(context, 1)->ToString());
     	v8::Local<v8::Value> value = messageField->Get(context, 1).ToLocalChecked();
     	v8::Local<v8::String> stringValue = value->ToString(context).ToLocalChecked();
     	v8::String::Utf8Value _messageFieldValue(isolate, stringValue);
@@ -74,11 +70,10 @@ v8::Local<v8::Array> pack_iso8583(v8::Handle<v8::Array> messageFields){
 
         if (i == 0 && c[0] != '1') is1987 = 1;
 
-        //(DL_UINT16 iField, const DL_UINT8 *iDataStr)
         (void)DL_ISO8583_MSG_SetField_Str( messageFieldPosition, (DL_UINT8 *)c, &isoMsg);
 
     	} else {
-    		// Handle the case where the value is not an Array
+          // what should happen here?
     	}
 
 
